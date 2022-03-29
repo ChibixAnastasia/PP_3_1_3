@@ -18,6 +18,7 @@ public class UserController {
     public UserController(UserService userService) {
         this.userService = userService;
     }
+
     @GetMapping("")
     @PreAuthorize(value = "hasAnyRole('ADMIN', 'USER')")
     public String homePage(@AuthenticationPrincipal User user, Model model) {

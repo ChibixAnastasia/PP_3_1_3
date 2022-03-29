@@ -19,6 +19,7 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 public class User implements UserDetails {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
@@ -44,7 +45,6 @@ public class User implements UserDetails {
     public User(String name, String lastName) {
         this.name = name;
         this.lastName = lastName;
-        this.roles.add(new Role());
     }
 
 
@@ -52,7 +52,6 @@ public class User implements UserDetails {
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return roles;
     }
-
 
     @Override
     public String getUsername() {
@@ -78,4 +77,5 @@ public class User implements UserDetails {
     public boolean isEnabled() {
         return true;
     }
+
 }

@@ -11,8 +11,8 @@ import ru.kata.spring.boot_security.demo.model.User;
 @Transactional
 public interface UserRepository extends JpaRepository<User, Long> {
 
-        @Modifying
-    @Query(value = "update users set name = :name , last_name = :last_name where id = :id",nativeQuery = true)
+    @Modifying
+    @Query(value = "update users set name = :name , last_name = :last_name where id = :id", nativeQuery = true)
     void updateUserById(@Param("id") Long id, @Param("name") String name, @Param("last_name") String lastName);
 
     User findByName(String name);
