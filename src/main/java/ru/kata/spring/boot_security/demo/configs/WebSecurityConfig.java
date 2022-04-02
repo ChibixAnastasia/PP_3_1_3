@@ -39,21 +39,6 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .and()
                 .logout()
                 .permitAll();
-
-//        http.authorizeRequests()
-//                .antMatchers("/").permitAll() // доступность всем
-//                .antMatchers("/user/**").access("hasRole('USER')")
-//                .antMatchers("/admin/**").access("hasRole('ADMIN')")
-//                .and().formLogin()
-//                .successHandler(successUserHandler);
-
-//        http.authorizeRequests()
-//                .antMatchers("/").hasAnyRole() // доступность всем
-//                .antMatchers("/user/**").hasRole("USER")
-//                .antMatchers("/admin/**").hasRole("ADMIN")
-//                .and().formLogin()
-//                .successHandler(successUserHandler);
-
     }
 
 
@@ -61,8 +46,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     protected void configureGlobal(AuthenticationManagerBuilder auth) throws Exception {
         auth.userDetailsService(userService).passwordEncoder(passwordEncoder());
     }
+
     @Bean
-    public PasswordEncoder passwordEncoder() {
+    public static PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder(12);
     }
 
