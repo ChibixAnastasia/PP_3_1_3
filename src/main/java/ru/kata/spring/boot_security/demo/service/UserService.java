@@ -1,67 +1,56 @@
-package ru.kata.spring.boot_security.demo.Service;
+package ru.kata.spring.boot_security.demo.service;
 
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import ru.kata.spring.boot_security.demo.dao.UserDaoEntityManagerImpl;
 import ru.kata.spring.boot_security.demo.model.User;
-import ru.kata.spring.boot_security.demo.repository.UserRepository;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import java.util.List;
 
 @Service
 @Transactional
 public class UserService implements UserDetailsService {
-    private final UserRepository userRepository;
-    @PersistenceContext
-    EntityManager entityManager;
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    final UserDaoEntityManagerImpl userDaoEntityManagerImpl;
+    private final PasswordEncoder passwordEncoder;
 
-    @Autowired
-    public UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserService(UserDaoEntityManagerImpl userDaoEntityManagerImpl, PasswordEncoder passwordEncoder) {
+        this.userDaoEntityManagerImpl = userDaoEntityManagerImpl;
+        this.passwordEncoder = passwordEncoder;
     }
-
     public List<User> getAllUsers() {
-        return userRepository.findAll();
+        return userDaoEntityManagerImpl.getAllUsers();
     }
 
-    public User readUserById(long id) {
-        return userRepository.getById(id);
-    }
-
-    public void saveUser(String name, String lastName) {
-        userRepository.save(new User(name, lastName));
+    public User readUserById(Long id) {
+        return userDaoEntityManagerImpl.readUserById(id);
     }
 
     public void saveUser(User user) {
         user.setPassword(passwordEncoder.encode(user.getPassword()));
-        userRepository.save(user);
+        userDaoEntityManagerImpl.saveUser(user);
     }
 
     public void removeUserById(long id) {
-        userRepository.deleteById(id);
+        userDaoEntityManagerImpl.removeUserById(id);
     }
 
     public void updateUser(User user) {
-        userRepository.save(user);
-        entityManager.merge(user);
+        userDaoEntityManagerImpl.saveUser(user);
+        userDaoEntityManagerImpl.updateUser(user);
     }
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByName(username);
+        User user = userDaoEntityManagerImpl.readUserByName(username);
         if (user == null) {
             throw new UsernameNotFoundException("User not found");
         }
+        user.getRoles().size();
         return user;
     }
-
 }

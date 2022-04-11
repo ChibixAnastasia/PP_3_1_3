@@ -7,13 +7,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
-import ru.kata.spring.boot_security.demo.Service.RoleService;
-import ru.kata.spring.boot_security.demo.Service.UserService;
+import ru.kata.spring.boot_security.demo.service.RoleService;
+import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import java.security.Principal;
-import java.util.ArrayList;
-import java.util.List;
 
 @Controller
 @RequestMapping("/admin")
@@ -24,7 +22,6 @@ public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
 
-
     //GET table admin
     @GetMapping("")
     public String index(ModelMap model, Principal principal) {
@@ -32,7 +29,6 @@ public class AdminController {
         model.addAttribute("principal", principal);
         model.addAttribute("user", new User());
         model.addAttribute("allRoles", roleService.findAll());
-        model.addAttribute("roles", new ArrayList());
         return "index";
     }
 
@@ -45,10 +41,7 @@ public class AdminController {
 
     //POST создание пользователя
     @PostMapping
-    public String create(@ModelAttribute("user") User user
-                         ,@RequestParam(value = "roles") List<String> roles
-    ) {
-        System.out.println("allRoles");
+    public String create(@ModelAttribute("user") User user) {
         userService.saveUser(user);
         return "redirect:/admin";
     }
