@@ -6,6 +6,7 @@ import org.springframework.transaction.annotation.Transactional;
 import ru.kata.spring.boot_security.demo.dao.RoleDaoEntityManagerImpl;
 import ru.kata.spring.boot_security.demo.model.Role;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -21,6 +22,25 @@ public class RoleService {
 
     public List<Role> findAll() {
         return roleDaoEntityManager.findAll();
+    }
+    public Role getRoleByName(String name) {
+        return roleDaoEntityManager.getRoleByName(name);
+    }
+
+    public List<Role> getSetRolesByNames(String[] roles) {
+        List<Role> res = new ArrayList<>();
+        System.err.println(res.toString());
+        for (String s : roles) {
+            res.add(getRoleByName(s));
+        }
+        return res;
+    }
+    public List<Role> getSetRolesByIds(List<Long> roles) {
+        List<Role> res = new ArrayList<>();
+        for (Long s : roles) {
+            res.add(getRoleById(s));
+        }
+        return res;
     }
 
 }

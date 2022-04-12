@@ -2,7 +2,9 @@ package ru.kata.spring.boot_security.demo.controller;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
@@ -12,6 +14,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 import ru.kata.spring.boot_security.demo.model.User;
 
 import java.security.Principal;
+import java.util.ArrayList;
 
 @Controller
 @RequestMapping("/admin")
@@ -21,6 +24,8 @@ import java.security.Principal;
 public class AdminController {
     private final UserService userService;
     private final RoleService roleService;
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     //GET table admin
     @GetMapping("")
@@ -41,7 +46,10 @@ public class AdminController {
 
     //POST создание пользователя
     @PostMapping
-    public String create(@ModelAttribute("user") User user) {
+    public String create(@ModelAttribute("user") User user,
+                         @RequestParam(value = "rolesFromCreateUser") ArrayList<Long> roles) {
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
+        user.setRoles(roleService.getSetRolesByIds(roles));
         userService.saveUser(user);
         return "redirect:/admin";
     }

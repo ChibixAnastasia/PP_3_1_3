@@ -104,34 +104,58 @@
 
             </div>
             <!--NEW USER-->
+
             <div class="tab-pane fade" id="newUser" role="tabpanel" aria-labelledby="profile-tab">
+                <p><strong>Add new user</strong></p>
+                <div class="container-fluid text-center col-3">
+                    <form class="col" th:method="POST" th:action="@{/admin}" th:object="${user}">
 
-                <form th:method="POST" th:action="@{/admin}" th:object="${user}">
 
-                    <label for="name">Name</label>
-                    <br>
-                    <input type="text" th:field="*{name}" id="name"/>
-                    <br>
-                    <label for="lastName">Last Name</label>
-                    <br>
-                    <input type="text" th:field="*{lastName}" id="lastName"/>
-                    <br>
-                    <label for="password">password</label>
-                    <br>
-                    <input type="text" th:field="*{password}" id="password"/>
-                    <br>
-                    <label>Roles:
-                        <input type="checkbox" name="roleList"
-                               th:each="role : ${allRoles}"
-                               th:text="${role.name}"
-                               th:value="${role.name}"/>
-<!--                               th:field="*{roles}"-->
-<!--                        />-->
-                    </label>
-                    <br>
-                    <input type="submit" class="btn btn-primary" value="Add new user"/>
+                        <div class="row">
+                            <div class="input-group input-group-sm mb-3">
+                                <label>First name
+                                    <input type="text" name="name" id="name"
+                                           class="form-control"
+                                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group input-group-sm mb-3">
+                                <label>Last name
+                                    <input type="text" name="lastName" id="lastName"
+                                           class="form-control"
+                                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group input-group-sm mb-3">
+                                <label>Password
+                                    <input type="password" name="password" id="password"
+                                           class="form-control"
+                                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </label>
+                            </div>
+                        </div>
 
-                </form>
+
+                        <div class="form-group">
+                            <select multiple size="2" name="rolesFromCreateUser" class="form-control">
+                                <label class="control-label">User's Role:</label>
+                                <option th:value="1">ROLE_ADMIN</option>
+                                <option selected="selected" th:value="2">ROLE_USER</option>
+                            </select>
+                        </div>
+
+                        <br>
+                        <div class="d-flex flex-row bd-highlight">
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary" value="Add new user"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
 
 
             </div>
