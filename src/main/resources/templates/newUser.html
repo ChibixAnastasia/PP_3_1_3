@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="https://jakarta.ee/xml/ns/jakartaee"
+      xmlns:c="http://java.sun.com/xml/ns/javaee">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>New user</title>
+</head>
+<body>
+
+<form:from action="saveUser" modelAttribute="user">
+    <form:hidden path="id"/>
+    <th><input type="text" class="form-control form-control-sm" placeholder="Name" th:field="*{Name}" id="name"/></th>
+    <th><input type="text" class="form-control form-control-sm" placeholder="Age" th:field="*{Age}" id="age"/></th>
+    <th><button type="submit" class="btn btn-primary btn-lg btn-success btn-sm btn-block">Add user</button> </th>
+</form:from>
+
+<!--
+ кнопка Add user сохраняет пользователя и переходит в метод create в контроллере action="createUser" затем "redirect: /admin"
+-->
+</body>
+</html>

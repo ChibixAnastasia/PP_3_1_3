@@ -2,7 +2,6 @@ package ru.kata.spring.boot_security.demo.dao;
 
 import org.springframework.stereotype.Repository;
 import ru.kata.spring.boot_security.demo.model.Role;
-import ru.kata.spring.boot_security.demo.model.User;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -10,7 +9,7 @@ import javax.persistence.TypedQuery;
 import java.util.List;
 
 @Repository
-public class RoleDaoEntityManagerImpl {
+public class RoleDaoImpl {
     @PersistenceContext
     private EntityManager entityManager;
 
@@ -23,7 +22,7 @@ public class RoleDaoEntityManagerImpl {
                 Role.class).getResultList();
     }
 
-    public Role getRoleByName(String name) {
+    public Role getByName(String name) {
         TypedQuery<Role> query = entityManager.createQuery("SELECT r FROM User r WHERE r.name = :name", Role.class);
         Role role = query.setParameter("name", name)
                 .getSingleResult();

@@ -26,7 +26,7 @@ public class UserController {
     public String homePage(@AuthenticationPrincipal User user, Model model,
                            Principal principal) {
         model.addAttribute("principal", principal);
-        model.addAttribute("user", userService.readUserById(user.getId()));
+        model.addAttribute("user", userService.getUser(user.getId()));
         return "user";
     }
 

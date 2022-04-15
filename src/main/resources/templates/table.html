@@ -1,0 +1,37 @@
+<!DOCTYPE html><meta charset=utf-8>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>index</title>
+</head>
+<body>
+
+
+<!-- https://getbootstrap.ru/docs/v4-alpha/content/tables/ -->
+<table class="table table-striped">
+    <thead>
+    <tr>
+        <th>ID</th>
+        <th>Name</th>
+        <th>Age</th>
+
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="user : ${users}">
+        <td th:utext="${user.id}">id</td>
+        <td th:utext="${user.name}">name</td>
+        <td th:utext="${user.age}">age</td>
+
+    </tr>
+
+    <tr>
+        <th> </th>
+
+    </tr>
+
+    </tbody>
+</table>
+
+
+</body>
+</html>
