@@ -21,7 +21,7 @@ public class User implements UserDetails {
     private String name;
 
     @Column(name = "age")
-    private String age;
+    private int age;
 
     @Column(name = "password")
     private String password;
@@ -86,11 +86,11 @@ public class User implements UserDetails {
         this.name = name;
     }
 
-    public String getAge() {
+    public int getAge() {
         return age;
     }
 
-    public void setAge(String age) {
+    public void setAge(int age) {
         this.age = age;
     }
 
@@ -115,17 +115,19 @@ public class User implements UserDetails {
         User user = (User) o;
 
         if (id != user.id) return false;
+        if (age != user.age) return false;
         if (name != null ? !name.equals(user.name) : user.name != null) return false;
-        if (age != null ? !age.equals(user.age) : user.age != null) return false;
-        return password != null ? password.equals(user.password) : user.password == null;
+        if (password != null ? !password.equals(user.password) : user.password != null) return false;
+        return roles != null ? roles.equals(user.roles) : user.roles == null;
     }
 
     @Override
     public int hashCode() {
         int result = (int) (id ^ (id >>> 32));
         result = 31 * result + (name != null ? name.hashCode() : 0);
-        result = 31 * result + (age != null ? age.hashCode() : 0);
+        result = 31 * result + age;
         result = 31 * result + (password != null ? password.hashCode() : 0);
+        result = 31 * result + (roles != null ? roles.hashCode() : 0);
         return result;
     }
 }
