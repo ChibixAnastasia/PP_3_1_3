@@ -13,7 +13,7 @@ import java.security.Principal;
 
 @Controller
 @RequestMapping("/user")
-@PreAuthorize("hasAnyRole('USER')")
+@PreAuthorize("hasAnyRole('ROLE_USER')")
 public class UserController {
     private final UserService userService;
 
@@ -22,12 +22,30 @@ public class UserController {
     }
 
     @GetMapping("")
-    @PreAuthorize(value = "hasAnyRole('ADMIN', 'USER')")
-    public String homePage(@AuthenticationPrincipal User user, Model model,
-                           Principal principal) {
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String homePage(@AuthenticationPrincipal User user, Model model, Principal principal) {
         model.addAttribute("principal", principal);
         model.addAttribute("user", userService.getUser(user.getId()));
-        return "user";
+        return "second";
     }
 
 }
+
+/*
+@Controller
+@RequestMapping("/user")
+@PreAuthorize("hasAnyRole('ROLE_USER')")
+public class UserController {
+    private final UserService userService;
+
+    public UserController(UserService userService) {
+        this.userService = userService;
+    }
+
+    @GetMapping("")
+    @PreAuthorize(value = "hasAnyRole('ROLE_ADMIN', 'ROLE_USER')")
+    public String homePage() {
+        return "user";
+    }
+
+}*/

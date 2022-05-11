@@ -1,56 +1,170 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:c="http://java.sun.com/JSP/Page">
+<html xmlns:th="http://www.thymeleaf.org">
 <html lang="en">
+
 <head>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"
+            integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p"
+            crossorigin="anonymous"></script>
+
     <meta charset="UTF-8">
     <title>Users</title>
 </head>
+
 <body>
+<!--HEADER-->
+<div class="">
+    <p class="bg-dark text-uppercase text-light">
 
+        <span th:text="${principal.getName()}"></span>
+        WITH ROLES
+        <span th:each="principalRoles : ${principal.getAuthorities()}" th:text="${principalRoles} + ' '"></span>
 
-<div class="container-fluid">
-    <table class="table table-striped table-sm">
-        <thead>
-        <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Age</th>
-            <th>Update</th>
-            <th>Delete</th>
-        </tr>
-        </thead>
-        <tbody>
-         <c:forEach var="user" items="${user}">
-            <c:url var="updateUser" value="/updateUser">
-                <c:param name="userIDinRequestParam" value="${user.id}"></c:param>
-            </c:url>
-
-             <c:url var="deleteUser" value="/deleteUser">
-                 <c:param name="userIDinRequestParam" value="${user.id}"></c:param>
-             </c:url>
-         <tr>
-            <td th:utext="${user.id}">id</td>
-            <td th:utext="${user.name}">name</td>
-            <td th:utext="${user.age}">age</td>
-            <td>
-                <input type="button" value="Update"
-                       onclick="window.location.href='update'"/>
-            </td>
-            <td>
-                <input type="button" value="Delete"
-                       onclick="window.location.href='delete'"/>
-            </td>
-        </tr>
-         </c:forEach>
-        </tbody>
-    </table>
-    <br>
-    <br>
-    <input type="button" value="ADD USER"
-           onclick="window.location.href='newUser.html'"/>
+        <a href="/logout">logout</a>
+    </p>
 </div>
 
+<div class="row bg-light">
+
+    <!--ASIDE-->
+    <div class="col-md-2" style="background: white">
+
+        <a href="/admin" class="d-block list-group-item list-group-item-action active" aria-current="true">admin</a>
+        <a href="/user" class="list-group-item list-group-item-action">user</a>
+
+    </div>
+
+    <div class="col-md-1"></div>
+
+    <!--SECTION-->
+    <div class="col-md-8" style="background: white">
+        <h1>Admin panel</h1>
+        <!--TABS-->
+        <div>
+            <ul class="nav nav-tabs" id="myTab" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="home-tab" data-bs-toggle="tab" data-bs-target="#userTable"
+                            type="button" role="tab" aria-controls="home" aria-selected="true">User table
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="profile-tab" data-bs-toggle="tab" data-bs-target="#newUser"
+                            type="button"
+                            role="tab" aria-controls="profile" aria-selected="false">New user
+                    </button>
+                </li>
+            </ul>
+        </div>
+        <!--TABS-CONTENT-->
+        <div class="tab-content" id="myTabContent">
+            <!--USER TABLE-->
+            <div class="tab-pane fade show active" id="newTable" role="tabpanel" aria-labelledby="home-tab">
+
+                <h3><p class="bg-light">All users</p></h3>
+
+                <table class="table table-striped table-sm">
+                    <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Age</th>
+                        <th>Roles</th>
+                        <th>Edit</th>
+                        <th>Delete</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+
+                    <tr th:each="user : ${users}">
+                        <td th:utext="${user.id}"></td>
+                        <td th:utext="${user.name}"></td>
+                        <td th:utext="${user.age}"></td>
+                        <td><span th:each="role : ${user.getRoles()}" th:text="${role} + ' '"></span></td>
+                        <td>
+                            <form th:method="GET" th:action="@{/admin/{id}/updateUser(id=${user.getId()})}">
+                                <button type="submit" class="btn btn-primary btn-lg btn-info btn-sm btn-block">Edit
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <form th:method="DELETE" th:action="@{/admin/{id}/deleteUser(id=${user.getId()})}">
+                                <button type="submit" class="btn btn-primary btn-lg btn-danger btn-sm btn-block">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+
+                    </tr>
+
+                    </tbody>
+                </table>
+
+            </div>
+            <!--NEW USER-->
+
+            <div class="tab-pane fade" id="newUser" role="tabpanel" aria-labelledby="profile-tab">
+                <p><strong>Add new user</strong></p>
+                <div class="container-fluid text-center col-3">
+                    <form class="col" th:method="POST" th:action="@{/saveUser}" th:object="${user}">
+
+
+                        <div class="row">
+                            <div class="input-group input-group-sm mb-3">
+                                <label>Name
+                                    <input type="text" name="name" id="name"
+                                           class="form-control"
+                                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group input-group-sm mb-3">
+                                <label>Age
+                                    <input type="text" name="age" id="age"
+                                           class="form-control"
+                                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </label>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="input-group input-group-sm mb-3">
+                                <label>Password
+                                    <input type="password" name="password" id="password"
+                                           class="form-control"
+                                           aria-label="Small" aria-describedby="inputGroup-sizing-sm">
+                                </label>
+                            </div>
+                        </div>
+
+
+                        <div class="form-group">
+                            <select multiple size="2" name="rolesFromCreateUser" class="form-control">
+                                <label class="control-label">User's Role:</label>
+                                <option th:value="1">ROLE_ADMIN</option>
+                                <option selected="selected" th:value="2">ROLE_USER</option>
+                            </select>
+                        </div>
+
+                        <br>
+                        <div class="d-flex flex-row bd-highlight">
+                            <div class="form-group">
+                                <input type="submit" class="btn btn-primary" value="Add new user"/>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+
+
+            </div>
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
 </body>
+
 </html>
