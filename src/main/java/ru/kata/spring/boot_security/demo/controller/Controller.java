@@ -15,7 +15,7 @@ import ru.kata.spring.boot_security.demo.service.UserService;
 
 @org.springframework.stereotype.Controller
 
-@RequestMapping("/admin")
+
 @PreAuthorize("hasAnyRole('ADMIN')")
 @AllArgsConstructor
 @Data
