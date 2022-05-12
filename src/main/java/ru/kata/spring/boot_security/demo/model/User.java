@@ -29,9 +29,9 @@ public class User implements UserDetails {
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(
-            name = "users_roles"
-            , joinColumns = @JoinColumn(name = "user_id")
-            , inverseJoinColumns = @JoinColumn(name = "role_id"))
+            name = "usersroles"
+            , joinColumns = @JoinColumn(name = "userid")
+            , inverseJoinColumns = @JoinColumn(name = "roleid"))
     private List<Role> roles = new ArrayList<>();
 
    /* public Role getRole() {
@@ -83,6 +83,7 @@ public class User implements UserDetails {
     public String getName() {
         return name;
     }
+
     public List<Role> getRoles() {
         return this.roles;
     }
@@ -102,6 +103,7 @@ public class User implements UserDetails {
     public void setRoles(List<Role> roles) {
         this.roles = roles;
     }
+
 
     @Override
     public String getPassword() {
